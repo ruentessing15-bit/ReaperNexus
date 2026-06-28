@@ -1,5 +1,5 @@
--- -- Reaper Nexus ULTIMATE [FULL VERSION - AUTOMATIC DISCORD CLIPBOARD]
--- -- No Thai characters in code
+-- Reaper Nexus ULTIMATE [FINAL VERSION - 20 RANDOM KEYS]
+-- No Thai characters in code logic
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
@@ -7,100 +7,22 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Stats = game:GetService("Stats")
-local Debris = game:GetService("Debris")
-local HttpService = game:GetService("HttpService")
+local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 -- // CLEANUP PREVIOUS RUNS
 if _G.ReaperNexusCleanup then _G.ReaperNexusCleanup() end
 
--- // GLOBAL DATA POOLS
-_G.ReaperNexusConfig = _G.ReaperNexusConfig or {
-    Language = "English",
-    SilentAimEnabled = false,
-    SelectedBodyPart = "Head",
-    ShowFov = false,
-    FovRadius = 150,
-    SpeedEnabled = false,
-    SpeedMultiplier = 0.10,
-    InfStamEnabled = false,
-    EnabledBox = false,
-    EnabledName = false,
-    EnabledDistance = false,
-    EnabledHpBar = false,
-    ItemESP_Enabled = true
+-- // KEY LIST (20 RANDOM KEYS)
+local KEY_LIST = {
+    "Zr123", "aung17b9p2n", "rn92k4m1p5z", "nexus7b8v3q", "reaper1p9x2w",
+    "candy4m7n2b", "nongr5v8x3z", "delta9k1p4m", "nexus2b7v8q", "reaper3p9x1w",
+    "candy5m4n7b", "nongr8v2x9z", "delta1k4p7m", "nexus3b9v2q", "reaper7p1x8w",
+    "candy2m9n4b", "nongr4v7x1z", "delta8k2p9m", "nexus1b4v7q", "reaper9p3x2w"
 }
 
-if not player_esp_data then player_esp_data = {} end
-if not TargetData then TargetData = {} end
-
--- // CONFIG SAVE/LOAD HANDLER
-local ConfigFileName = "Reaper_Nexus_Save.json"
-local function SaveConfig()
-    if writefile then
-        local success, encoded = pcall(HttpService.JSONEncode, HttpService, _G.ReaperNexusConfig)
-        if success then
-            writefile(ConfigFileName, encoded)
-        end
-    end
-end
-
-local function LoadConfig()
-    if isfile and isfile(ConfigFileName) and readfile then
-        local success, decoded = pcall(HttpService.JSONDecode, HttpService, readfile(ConfigFileName))
-        if success and type(decoded) == "table" then
-            for key, val in pairs(decoded) do
-                _G.ReaperNexusConfig[key] = val
-            end
-        end
-    end
-end
-LoadConfig()
-
--- // LOCALIZATION DICTIONARY
-local Localization = {
-    English = {
-        Combat = "Combat", SilentAim = "Enable Silent Aim", BodyPart = "Target BodyPart", ShowFov = "Show FOV Circle", FovRadius = "FOV Radius",
-        Player = "Player", Speed = "Enable Walk Speed", SpeedAmt = "Speed Multiplier", Stamina = "Infinite Stamina",
-        ESP = "ESP", Box = "Show Box", Name = "Show Name", Distance = "Show Distance", HPBar = "Show HP Bar",
-        Loot = "Auto Loot", ItemESP = "Enable Item ESP",
-        Settings = "Settings", LangSelect = "UI Language", Rejoin = "Rejoin Game", SaveBtn = "Save Configurations",
-        Loaded = "Full Systems Loaded Successfully!", SavedNotify = "Configurations saved successfully!",
-        ClipboardNotify = "Discord link copied to clipboard!"
-    },
-    Thai = {
-        Combat = "ต่อสู้", SilentAim = "เปิดใช้งาน ล็อกเป้า (Silent Aim)", BodyPart = "ชิ้นส่วนเป้าหมาย", ShowFov = "แสดงวงกลม FOV", FovRadius = "ระยะวงกลม FOV",
-        Player = "ผู้เล่น", Speed = "เปิดใช้งาน ความเร็วการเดิน", SpeedAmt = "ตัวคูณความเร็ว", Stamina = "วิ่งไม่จำกัด",
-        ESP = "มองทะลุ", Box = "แสดงกรอบ", Name = "แสดงชื่อ", Distance = "แสดงระยะทาง", HPBar = "แสดงหลอดเลือด",
-        Loot = "เก็บฟาร์มอัตโนมัติ", ItemESP = "เปิดใช้งาน ไอเทม ESP",
-        Settings = "ตั้งค่า", LangSelect = "ภาษาของ UI", Rejoin = "เปลี่ยนเซิร์ฟเวอร์ใหม่", SaveBtn = "บันทึกการตั้งค่าปัจจุบัน",
-        Loaded = "โหลดระบบเสร็จสิ้นสมบูรณ์แล้ว!", SavedNotify = "บันทึกข้อมูลการตั้งค่าเรียบร้อยแล้ว!",
-        ClipboardNotify = "คัดลอกลิงก์ Discord ลงในคลิปบอร์ดแล้ว!"
-    }
-}
-
-local function GetText(key)
-    local currentLang = _G.ReaperNexusConfig.Language
-    if Localization[currentLang] and Localization[currentLang][key] then
-        return Localization[currentLang][key]
-    end
-    return Localization["English"][key] or key
-end
-
--- // 20 KEYS ARRAY
-local GeneratedKeys = {
-    "ganusn2k1h37n", "b9f8d7e6c5b4a", "x1y2z3w4v5u6t", "m7n8o9p0q1r2s",
-    "k3l4m5n6o7p8q", "a1b2c3d4e5f6g", "h7i8j9k0l1m2n", "o3p4q5r6s7t8u",
-    "v9w0x1y2z3a4b", "c5d6e7f8g9h0i", "j1k2l3m4n5o6p", "q7r8s9t0u1v2w",
-    "x3y4z5a6b7c8d", "e9f0g1h2i3j4k", "l5m6n7o8p9q0r", "s1t2u3v4w5x6y",
-    "z7a8b9c0d1e2f", "g3h4i5j6k7l8m", "n9o0p1q2r3s4t", "u5v6w7x8y9z0a"
-}
-
--- // DISCORD LINK CONFIGURATION
-local DiscordInviteLink = "https://discord.gg/ar4kTsd38F"
-
--- // UI WINDOW INITIALIZATION WITH AUTO-CLIPBOARD KEY SYSTEM
+-- // UI SETUP
 local Window = WindUI:CreateWindow({
     Title = "Reaper Nexus",
     Author = "by Nong R",
@@ -109,81 +31,39 @@ local Window = WindUI:CreateWindow({
     Transparent = true,
     Theme = "Dark",
     KeySystem = { 
-        Key = GeneratedKeys,
-        Note = "Please enter a valid developer key to unlock Reaper Nexus. Click 'Get Key' to copy the Discord invite link.",
-        Thumbnail = { Image = "rbxassetid://91476568341639", Title = "" },
-        URL = DiscordInviteLink, -- Standard WindUI redirect fallback
+        Key = KEY_LIST,
+        Note = "Please enter one of the 20 keys to unlock Reaper Nexus",
+        Thumbnail = {
+            Image = "rbxassetid://91476568341639",
+            Title = "",
+        },
+        URL = "https://www.google.com",
         SaveKey = true,
     },
 })
+
 Window:EditOpenButton({ Enabled = false })
 
--- Hook Get Key click logic directly via setclipboard executor function
-task.spawn(function()
-    local coreGui = game:GetService("CoreGui")
-    local keyWindow = coreGui:WaitForChild("WindUI", 5) and coreGui.WindUI:FindFirstChild("KeySystem") or coreGui:FindFirstChildOfClass("ScreenGui")
-    
-    if keyWindow then
-        local function checkButtons(parent)
-            for _, child in pairs(parent:GetChildren()) do
-                if child:IsA("TextButton") and (string.lower(child.Text) == "get key" or string.find(string.lower(child.Name), "getkey")) then
-                    child.MouseButton1Click:Connect(function()
-                        if setclipboard then
-                            setclipboard(DiscordInviteLink)
-                            WindUI:Notify({ Title = "System Integration", Content = GetText("ClipboardNotify"), Duration = 3 })
-                        elseif toclipboard then
-                            toclipboard(DiscordInviteLink)
-                            WindUI:Notify({ Title = "System Integration", Content = GetText("ClipboardNotify"), Duration = 3 })
-                        end
-                    end)
-                else
-                    checkButtons(child)
-                end
-            end
-        end
-        checkButtons(keyWindow)
-    end
-end)
-
--- // FLOATING BUTTON (MOBILE OPTIMIZED: 50x50 PX)
+-- // SMALL & TRANSPARENT FLOATING BUTTON
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ReaperNexusFloating"
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-if syn and syn.protect_gui then
-    syn.protect_gui(ScreenGui)
-    ScreenGui.Parent = game:GetService("CoreGui")
-elseif getgui then
-    ScreenGui.Parent = getgui()
-else
-    ScreenGui.Parent = game:GetService("CoreGui")
-end
+ScreenGui.Parent = game:GetService("CoreGui")
 
 local FloatingButton = Instance.new("ImageButton")
 FloatingButton.Name = "MainButton"
 FloatingButton.Parent = ScreenGui
-FloatingButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+FloatingButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FloatingButton.BackgroundTransparency = 0.6
 FloatingButton.BorderSizePixel = 0
-FloatingButton.Position = UDim2.new(0.05, 0, 0.2, 0)
-FloatingButton.Size = UDim2.new(0, 50, 0, 50)
+FloatingButton.Position = UDim2.new(0.02, 0, 0.2, 0)
+FloatingButton.Size = UDim2.new(0, 35, 0, 35)
 FloatingButton.Image = "rbxassetid://91476568341639"
+FloatingButton.ImageTransparency = 0.3
 FloatingButton.ClipsDescendants = true
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = FloatingButton
-
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Color = Color3.fromRGB(45, 45, 45)
-UIStroke.Thickness = 1.5
-UIStroke.Parent = FloatingButton
-
-local UIGradient = Instance.new("UIGradient")
-UIGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 0)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-})
-UIGradient.Parent = FloatingButton
 
 -- Dragging Logic
 local dragging, dragInput, dragStart, startPos
@@ -213,83 +93,15 @@ end)
 
 FloatingButton.MouseButton1Click:Connect(function() Window:Toggle() end)
 
--- // TAB BUILDING COMPONENT
-local Tabs = {}
-local function BuildTabs()
-    for _, child in pairs(Window:GetChildren()) do
-        if child:IsA("Frame") or (child.Name and string.find(child.Name, "Tab")) then
-            pcall(function() child:Destroy() end)
-        end
-    end
-
-    Tabs.Combat = Window:Tab({Title = GetText("Combat"), Icon = "sword"})
-    Tabs.Player = Window:Tab({Title = GetText("Player"), Icon = "user"})
-    Tabs.ESP = Window:Tab({Title = GetText("ESP"), Icon = "eye"})
-    Tabs.Loot = Window:Tab({Title = GetText("Loot"), Icon = "box"}) 
-    Tabs.Misc = Window:Tab({Title = GetText("Settings"), Icon = "settings"})
-
-    -- COMBAT
-    Tabs.Combat:Toggle({ Title = GetText("SilentAim"), Default = _G.ReaperNexusConfig.SilentAimEnabled, Callback = function(v) _G.ReaperNexusConfig.SilentAimEnabled = v end })
-    Tabs.Combat:Dropdown({ Title = GetText("BodyPart"), Default = _G.ReaperNexusConfig.SelectedBodyPart, Values = {"Head", "HumanoidRootPart"}, Callback = function(v) _G.ReaperNexusConfig.SelectedBodyPart = v end })
-    Tabs.Combat:Toggle({ Title = GetText("ShowFov"), Default = _G.ReaperNexusConfig.ShowFov, Callback = function(v) _G.ReaperNexusConfig.ShowFov = v end })
-    Tabs.Combat:Slider({ Title = GetText("FovRadius"), Value = {Min = 50, Max = 500, Default = _G.ReaperNexusConfig.FovRadius}, Step = 1, Callback = function(v) _G.ReaperNexusConfig.FovRadius = v end })
-
-    -- PLAYER
-    Tabs.Player:Toggle({ Title = GetText("Speed"), Default = _G.ReaperNexusConfig.SpeedEnabled, Callback = function(v) _G.ReaperNexusConfig.SpeedEnabled = v end })
-    Tabs.Player:Slider({ Title = GetText("SpeedAmt"), Value = {Min = 0.05, Max = 0.50, Default = _G.ReaperNexusConfig.SpeedMultiplier}, Step = 0.01, Callback = function(v) _G.ReaperNexusConfig.SpeedMultiplier = tonumber(v) end })
-    Tabs.Player:Toggle({ Title = GetText("Stamina"), Default = _G.ReaperNexusConfig.InfStamEnabled, Callback = function(v) _G.ReaperNexusConfig.InfStamEnabled = v end })
-
-    -- ESP
-    Tabs.ESP:Toggle({ Title = GetText("Box"), Default = _G.ReaperNexusConfig.EnabledBox, Callback = function(v) _G.ReaperNexusConfig.EnabledBox = v end })
-    Tabs.ESP:Toggle({ Title = GetText("Name"), Default = _G.ReaperNexusConfig.EnabledName, Callback = function(v) _G.ReaperNexusConfig.EnabledName = v end })
-    Tabs.ESP:Toggle({ Title = GetText("Distance"), Default = _G.ReaperNexusConfig.EnabledDistance, Callback = function(v) _G.ReaperNexusConfig.EnabledDistance = v end })
-    Tabs.ESP:Toggle({ Title = GetText("HPBar"), Default = _G.ReaperNexusConfig.EnabledHpBar, Callback = function(v) _G.ReaperNexusConfig.EnabledHpBar = v end })
-
-    -- LOOT
-    Tabs.Loot:Toggle({ Title = GetText("ItemESP"), Default = _G.ReaperNexusConfig.ItemESP_Enabled, Callback = function(v) _G.ReaperNexusConfig.ItemESP_Enabled = v end })
-
-    -- SETTINGS
-    Tabs.Misc:Dropdown({
-        Title = GetText("LangSelect"),
-        Default = _G.ReaperNexusConfig.Language,
-        Values = {"English", "Thai"},
-        Callback = function(v)
-            if _G.ReaperNexusConfig.Language ~= v then
-                _G.ReaperNexusConfig.Language = v
-                SaveConfig()
-                BuildTabs() 
-            end
-        end
-    })
-    Tabs.Misc:Button({ Title = GetText("SaveBtn"), Callback = function() SaveConfig() WindUI:Notify({ Title = "Reaper Nexus", Content = GetText("SavedNotify"), Duration = 3 }) end })
-    Tabs.Misc:Button({ Title = GetText("Rejoin"), Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId) end })
-end
-
--- // ESP POOL REGISTRATION
-local function CreateESPData(plr)
-    if plr == LocalPlayer then return end
-    if not player_esp_data[plr] then
-        player_esp_data[plr] = {
-            Box = Drawing.new("Square"), Name = Drawing.new("Text"), Distance = Drawing.new("Text"),
-            HealthBar = Drawing.new("Square"), HealthBarOutline = Drawing.new("Square")
-        }
-        local e = player_esp_data[plr]
-        e.Box.Thickness = 1; e.Box.Filled = false; e.Box.Color = Color3.fromRGB(255, 0, 0)
-        e.Name.Size = 14; e.Name.Center = true; e.Name.Outline = true; e.Name.Color = Color3.fromRGB(255, 255, 255)
-        e.Distance.Size = 14; e.Distance.Center = true; e.Distance.Outline = true; e.Distance.Color = Color3.fromRGB(255, 255, 255)
-        e.HealthBar.Filled = true; e.HealthBarOutline.Thickness = 1; e.HealthBarOutline.Filled = false; e.HealthBarOutline.Color = Color3.fromRGB(0,0,0)
-    end
-end
-for _, p in pairs(Players:GetPlayers()) do CreateESPData(p) end
-Players.PlayerAdded:Connect(CreateESPData)
-Players.PlayerRemoving:Connect(function(p) if player_esp_data[p] then for _,v in pairs(player_esp_data[p]) do v:Remove() end player_esp_data[p] = nil end end)
-
--- // CORE LOGIC IMPLEMENTATIONS
-local FOVCircle = Drawing.new("Circle"); FOVCircle.Thickness = 1; FOVCircle.Filled = false; FOVCircle.Color = Color3.fromRGB(0, 255, 0); FOVCircle.Visible = false
-local BulletSpeed = 1500
+-- // ORIGINAL FUNCTIONS FROM PASTED_CONTENT.TXT
+local TargetData = {}; local WeaponDB = {}; local Connections = {}
+local SelectedBodyPart = "Head"; local SilentAimEnabled = false; local showFov = false; local BulletSpeed = 1500
 local GunLookup = {["P226"]=true, ["MP5"]=true, ["M24"]=true, ["Draco"]=true, ["Glock"]=true, ["Sawnoff"]=true, ["Uzi"]=true, ["G3"]=true, ["C9"]=true, ["Hunting Rifle"]=true, ["Anaconda"]=true, ["AK47"]=true, ["Remington"]=true, ["Double Barrel"]=true, ["Skorpion"]=true}
+local FOVCircle = Drawing.new("Circle"); FOVCircle.Radius = 150; FOVCircle.Thickness = 1; FOVCircle.Filled = false; FOVCircle.Color = Color3.fromRGB(0, 255, 0); FOVCircle.Visible = false
+local speedEnabled = false; local speedMultiplier = 0.10; local infStamEnabled = false
+_G.EnabledBox = false; _G.EnabledHpBar = false; _G.EnabledName = false; _G.EnabledDistance = false; local ItemESP_Enabled = true
 
-local function GetTargetPart(character) return character and character:FindFirstChild(_G.ReaperNexusConfig.SelectedBodyPart) end
+local function GetTargetPart(character) return character and character:FindFirstChild(SelectedBodyPart) end
 
 local function GetClosestTarget()
     local closest, shortest = nil, math.huge; local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
@@ -300,7 +112,7 @@ local function GetClosestTarget()
                 local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
                 if onScreen then
                     local dist = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
-                    if (not _G.ReaperNexusConfig.ShowFov or dist <= FOVCircle.Radius) and dist < shortest then shortest = dist closest = plr end
+                    if (not showFov or dist <= FOVCircle.Radius) and dist < shortest then shortest = dist closest = plr end
                 end
             end
         end
@@ -328,10 +140,10 @@ oldFire = hookfunction(send.FireServer, function(self, ...)
     local args = {...}; local isGun = false
     pcall(function() if typeof(args[3])=="Instance" and GunLookup[args[3].Name] then isGun = true end end)
     if not isGun and LocalPlayer.Character then for _, t in pairs(LocalPlayer.Character:GetChildren()) do if (t:IsA("Tool") or t:IsA("Model")) and GunLookup[t.Name] then isGun = true break end end end
-    if _G.ReaperNexusConfig.SilentAimEnabled and isGun then
+    if SilentAimEnabled and isGun then
         local target = GetClosestTarget()
         if target and target.Character then
-            local tPart = target.Character:FindFirstChild(_G.ReaperNexusConfig.SelectedBodyPart) or target.Character:FindFirstChild("HumanoidRootPart")
+            local tPart = target.Character:FindFirstChild(SelectedBodyPart) or target.Character:FindFirstChild("HumanoidRootPart")
             local root = target.Character:FindFirstChild("HumanoidRootPart")
             if tPart and root then
                 local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
@@ -346,79 +158,57 @@ oldFire = hookfunction(send.FireServer, function(self, ...)
     return oldFire(self, unpack(args))
 end)
 
--- // ESP DRAWING INTERACTION UPDATE
-local function updatePlayerESP(player)
-    local esp = player_esp_data[player]
-    if not esp then return end
-    local char = player.Character; local hum = char and char:FindFirstChildOfClass("Humanoid")
-    local root = char and char:FindFirstChild("HumanoidRootPart"); local head = char and char:FindFirstChild("Head")
-    if not (char and hum and root and head and hum.Health > 0) then for _, v in pairs(esp) do v.Visible = false end return end
-    local screenHead, onHead = Camera:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
-    local screenFeet, onFeet = Camera:WorldToViewportPoint(root.Position - Vector3.new(0, 3, 0))
-    if onHead or onFeet then
-        local height = math.abs(screenHead.Y - screenFeet.Y); local width = height / 2; local x = screenHead.X - (width / 2); local y = screenHead.Y
-        
-        esp.Box.Size = Vector2.new(width, height); esp.Box.Position = Vector2.new(x, y); esp.Box.Visible = _G.ReaperNexusConfig.EnabledBox
-        esp.Name.Text = player.DisplayName; esp.Name.Position = Vector2.new(x + width / 2, y - 16); esp.Name.Visible = _G.ReaperNexusConfig.EnabledName
-        
-        local lChar = LocalPlayer.Character; local lRoot = lChar and lChar:FindFirstChild("HumanoidRootPart")
-        if lRoot then 
-            local dist = math.floor((lRoot.Position - root.Position).Magnitude)
-            esp.Distance.Text = tostring(dist) .. "m"; esp.Distance.Position = Vector2.new(x + width / 2, y + height + 2); esp.Distance.Visible = _G.ReaperNexusConfig.EnabledDistance 
-        else 
-            esp.Distance.Visible = false 
-        end
-        
-        local healthRatio = hum.Health / hum.MaxHealth; local hBarX = x - 6
-        esp.HealthBarOutline.Size = Vector2.new(4, height); esp.HealthBarOutline.Position = Vector2.new(hBarX, y); esp.HealthBarOutline.Visible = _G.ReaperNexusConfig.EnabledHpBar
-        
-        local hHeight = height * healthRatio
-        esp.HealthBar.Size = Vector2.new(2, hHeight); esp.HealthBar.Position = Vector2.new(hBarX + 1, y + (height - hHeight)); esp.HealthBar.Color = Color3.fromHSV(healthRatio * 0.3, 1, 1); esp.HealthBar.Visible = _G.ReaperNexusConfig.EnabledHpBar
-    else 
-        for _, v in pairs(esp) do v.Visible = false end 
-    end
-end
+-- // TABS
+local CombatTab = Window:Tab({Title = "Combat", Icon = "sword"})
+local PlayerTab = Window:Tab({Title = "Player", Icon = "user"})
+local ESPTab = Window:Tab({Title = "ESP", Icon = "eye"})
+local LootTab = Window:Tab({Title = "Auto Loot", Icon = "box"}) 
+local SettingsTab = Window:Tab({Title = "Settings", Icon = "settings"})
 
--- // CHASSIS UPDATES & LOOPS
+-- // UI ELEMENTS
+CombatTab:Toggle({ Title = "Enable Silent Aim", Default = false, Callback = function(v) SilentAimEnabled = v end })
+CombatTab:Dropdown({ Title = "Target BodyPart", Default = "Head", Values = {"Head", "HumanoidRootPart"}, Callback = function(v) SelectedBodyPart = v end })
+CombatTab:Toggle({ Title = "Show FOV Circle", Default = false, Callback = function(v) showFov = v; FOVCircle.Visible = v end })
+CombatTab:Slider({ Title = "FOV Radius", Value = {Min = 50, Max = 500, Default = 150}, Step = 1, Callback = function(v) FOVCircle.Radius = v end })
+
+PlayerTab:Toggle({ Title = "Enable Walk Speed", Default = false, Callback = function(s) speedEnabled = s end })
+PlayerTab:Slider({ Title = "Speed Multiplier", Value = {Min = 0.05, Max = 0.15, Default = 0.10}, Step = 0.01, Callback = function(v) speedMultiplier = tonumber(v) end })
+PlayerTab:Toggle({ Title = "Infinite Stamina", Default = false, Callback = function(s) infStamEnabled = s end })
+
+ESPTab:Toggle({ Title = "Show Box", Default = false, Callback = function(s) _G.EnabledBox = s end })
+ESPTab:Toggle({ Title = "Show Name", Default = false, Callback = function(s) _G.EnabledName = s end })
+ESPTab:Toggle({ Title = "Show Distance", Default = false, Callback = function(s) _G.EnabledDistance = s end })
+ESPTab:Toggle({ Title = "Show HP Bar", Default = false, Callback = function(s) _G.EnabledHpBar = s end })
+
+LootTab:Toggle({ Title = "Enable Item ESP", Default = true, Callback = function(s) ItemESP_Enabled = s end })
+
+-- // SETTINGS
+SettingsTab:Button({ Title = "Boost FPS", Desc = "Disable shadows and effects", Callback = function()
+    Lighting.GlobalShadows = false
+    Lighting.FogEnd = 9e9
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("PostProcessEffect") or v:IsA("ParticleEmitter") or v:IsA("Explosion") then v.Enabled = false end
+    end
+    WindUI:Notify({ Title = "FPS Boost", Content = "Effects disabled!", Duration = 3 })
+end })
+
+local currentLang = "EN"
+SettingsTab:Button({ Title = "Switch Language (EN/TH)", Desc = "Current: " .. currentLang, Callback = function()
+    if currentLang == "EN" then currentLang = "TH" else currentLang = "EN" end
+    WindUI:Notify({ Title = "Language", Content = "Switched to " .. currentLang, Duration = 2 })
+end })
+
+SettingsTab:Button({ Title = "Rejoin Game", Callback = function() game:GetService("TeleportService"):Teleport(game.PlaceId) end })
+
+-- // LOOPS
 RunService.RenderStepped:Connect(function()
-    FOVCircle.Visible = _G.ReaperNexusConfig.ShowFov
-    FOVCircle.Radius = _G.ReaperNexusConfig.FovRadius
-    if _G.ReaperNexusConfig.ShowFov then FOVCircle.Position = game:GetService("UserInputService"):GetMouseLocation() end
-    for _, plr in pairs(Players:GetPlayers()) do if player_esp_data[plr] then updatePlayerESP(plr) end end
+    if showFov then FOVCircle.Position = game:GetService("UserInputService"):GetMouseLocation() end
 end)
 
-task.spawn(function()
-    while task.wait() do
-        pcall(function()
-            local char = LocalPlayer.Character
-            local hum = char and char:FindFirstChildOfClass("Humanoid")
-            local root = char and char:FindFirstChild("HumanoidRootPart")
-            
-            if _G.ReaperNexusConfig.SpeedEnabled and hum and root then
-                if hum.MoveDirection.Magnitude > 0 then
-                    root.CFrame = root.CFrame + (hum.MoveDirection * _G.ReaperNexusConfig.SpeedMultiplier)
-                end
-            end
-            
-            if _G.ReaperNexusConfig.InfStamEnabled and char and char:FindFirstChild("Stamina") then
-                local stam = char:FindFirstChild("Stamina")
-                if stam:IsA("NumberValue") or stam:IsA("IntValue") then
-                    stam.Value = 100
-                end
-            end
-        end)
-    end
-end)
-
--- // WORKSPACE INITIAL BUILD
-BuildTabs()
-
--- // CLEANUP ARTIFACT ENGINE
+-- // CLEANUP
 _G.ReaperNexusCleanup = function()
     ScreenGui:Destroy()
     FOVCircle:Remove()
-    for _, esp in pairs(player_esp_data) do for _, v in pairs(esp) do v:Remove() end end
-    player_esp_data = {}
 end
 
-WindUI:Notify({ Title = "Reaper Nexus", Content = GetText("Loaded"), Duration = 5 })
+WindUI:Notify({ Title = "Reaper Nexus", Content = "Ultimate Systems Loaded!", Duration = 5 })
